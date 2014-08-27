@@ -1,0 +1,7 @@
+<resources>
+
+    <style name="AppBaseTheme" parent="Theme.AppCompat">
+        <item name="android:actionBarStyle">@style/ActionBarStyle_.</item> 
+    </style>
+
+</resources>

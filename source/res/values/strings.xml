@@ -1,0 +1,13 @@
+<resources>
+
+    <string name="app_name">LinxTool</string>
+    <string name="title_activity_main">临克斯</string>
+    
+    <string name="ui_text">点击界面跳转</string>
+    
+    <string name="them_normal">永恒经典</string>
+    
+    <string name="count_show">8</string>
+    <string name="complate">完成</string>
+    
+</resources>

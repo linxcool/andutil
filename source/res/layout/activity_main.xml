@@ -1,0 +1,64 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#1f546c"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:id="@+id/body"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/foot"
+        android:gravity="center" >
+
+        <com.linxcool.widget.RotateImageView
+            android:id="@+id/rotateImageView1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true"
+            android:scaleType="matrix"
+            android:src="@drawable/main_rotate_iv_left_top" />
+
+        <com.linxcool.widget.RotateImageView
+            android:id="@+id/rotateImageView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/rotateImageView1"
+            android:layout_marginTop="5dp"
+            android:scaleType="matrix"
+            android:src="@drawable/main_rotate_iv_left_bottom" />
+
+        <com.linxcool.widget.RotateImageView
+            android:id="@+id/rotateImageView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/rotateImageView2"
+            android:layout_alignTop="@+id/rotateImageView1"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/rotateImageView1"
+            android:scaleType="matrix"
+            android:src="@drawable/main_rotate_iv_right" />
+
+        <com.linxcool.widget.RotateImageView
+            android:id="@+id/rotateImageView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/rotateImageView2"
+            android:layout_alignRight="@+id/rotateImageView3"
+            android:layout_below="@+id/rotateImageView2"
+            android:layout_marginTop="5dp"
+            android:scaleType="matrix"
+            android:src="@drawable/main_rotate_iv_bottom" />
+    </RelativeLayout>
+
+    <com.linxcool.widget.RenderLayout
+        android:id="@+id/foot"
+        android:layout_width="match_parent"
+        android:layout_height="48dp" 
+        android:layout_alignParentBottom="true"
+        android:background="#55000000" />
+
+</RelativeLayout>

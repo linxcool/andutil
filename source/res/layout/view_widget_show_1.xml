@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#1f546c"
+    android:gravity="center_horizontal">
+
+    <TextView
+        android:id="@+id/tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="@string/ui_text"
+        android:textColor="#ffffff"
+        android:textSize="20sp" />
+
+    <com.linxcool.widget.SelectView
+        android:id="@+id/selectView"
+        android:layout_below="@+id/tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/select_bg" />
+
+    <com.linxcool.widget.SlipButton
+        android:id="@+id/slipButton"
+        android:layout_below="@+id/selectView"
+        android:layout_width="80dp"
+        android:layout_height="28dp"
+        android:layout_margin="10dp"
+        android:background="@drawable/slip_btn_off" />
+
+    <com.linxcool.widget.ScaleArea
+        android:id="@+id/scaleArea"
+        android:layout_below="@+id/slipButton"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_margin="10dp"
+        android:background="#22ffffff" />
+
+    <com.linxcool.widget.AdvertiseView
+        android:background="#55ffffff"
+        android:id="@+id/ad"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"/>
+</RelativeLayout>
