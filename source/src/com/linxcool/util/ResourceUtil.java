@@ -29,11 +29,12 @@ public class ResourceUtil {
 
 	private static final String TAG = "ResourceUtil";
 	
-	public static String SD_APK_PATH   = "linxcool/apks/";
-	public static String SD_IMG_PATH   = "linxcool/imgs/";
-	public static String ROM_IMG_PATH  = "imgs/";
-	public static String SD_DATA_PATH  = "linxcool/data/";
-	public static String ROM_DATA_PATH = "data/";
+	public static final String SD_IMG_PATH   = "linxcool/sdk/imgs/";
+	public static final String ROM_IMG_PATH  = "sdk/imgs/";
+	public static final String SD_DATA_PATH  = "linxcool/sdk/data/";
+	public static final String ROM_DATA_PATH = "sdk/data/";
+	public static final String SD_PLG_PATH   = "linxcool/sdk/plgs/";
+	public static final String ROM_PLG_PATH  = "sdk/plgs/";
 	
 	private static final int OPTIMIZATION_SIZE = 4096;
 	
@@ -59,8 +60,8 @@ public class ResourceUtil {
 	 * @param activity
 	 * @return cache directory end with separator
 	 */
-	public static String getRomCachePath(Context context){
-		return context.getCacheDir() + File.separator;
+	public static String getRomPath(Context context){
+		return context.getCacheDir().getParent() + File.separator;
 	}
 	
 	/**
@@ -69,7 +70,7 @@ public class ResourceUtil {
 	 * @return
 	 */
 	public static boolean isSdcardFileExist(String filePath){
-		File file=new File(getSdcardPath()+filePath);
+		File file = new File(getSdcardPath() + filePath);
 		return file.exists();
 	}
 	
@@ -79,12 +80,17 @@ public class ResourceUtil {
 	 * @param fileName 不包含应用内存目录的文件路径
 	 * @return
 	 */
-	public static boolean isRomCacheFileExist(Context context,String filePath){
-		String cachePath = getRomCachePath(context);
-		File file=new File(cachePath+filePath);
+	public static boolean isRomFileExist(Context context,String filePath){
+		String romPath = getRomPath(context);
+		File file = new File(romPath + filePath);
 		return file.exists();
 	}
 	
+	/**
+	 * 检查文件是否存在
+	 * @param filePath 全路径
+	 * @return
+	 */
 	public static boolean isFileExist(String filePath){
 		File file = new File(filePath);
 		return file.exists();
@@ -98,7 +104,7 @@ public class ResourceUtil {
 	public static String mkSdcardFileDirs(String path) {
 		String rsPath = getSdcardPath() + path;
 		File file = new File(rsPath);
-		if (!file.exists())file.mkdirs();
+		if (!file.exists()) file.mkdirs();
 		return rsPath;
 	}
 	
@@ -108,11 +114,11 @@ public class ResourceUtil {
 	 * @param path 不包含应用内存目录的文件全路径
 	 * @return
 	 */
-	public static String mkRomCacheDirs(Context context,String path) {
-		String cachePath = getRomCachePath(context);
-		String rsPath=cachePath+path;
+	public static String mkRomDirs(Context context, String path) {
+		String romPath = getRomPath(context);
+		String rsPath = romPath + path;
 		File file = new File(rsPath);
-		if (!file.exists())file.mkdirs();
+		if (!file.exists()) file.mkdirs();
 		return rsPath;
 	}
 	
@@ -141,7 +147,7 @@ public class ResourceUtil {
 	/**
 	 * 写入图片数据
 	 * <p>无需关心目录及文件是否存在
-	 * @param activity
+	 * @param context
 	 * @param bmp
 	 * @param fileName
 	 */
@@ -154,8 +160,8 @@ public class ResourceUtil {
 		} else {
 			String filePath = ROM_IMG_PATH + fileName;
 			String folder = getFolder(filePath);
-			mkRomCacheDirs(context, folder);
-			saveBitmap2RomCache(context, bmp, filePath);
+			mkRomDirs(context, folder);
+			saveBitmap2Rom(context, bmp, filePath);
 		}
 	}
 	
@@ -170,7 +176,7 @@ public class ResourceUtil {
 			Log.e(TAG, "save bitmap to sdCard fail as sdCard not exist");
 			return false;
 		}
-		return saveBitmap(bmp, getSdcardPath()+filePath);
+		return saveBitmap(bmp, getSdcardPath() + filePath);
 	}
 	
 	/**
@@ -180,18 +186,18 @@ public class ResourceUtil {
 	 * @param filePath 
 	 * @return
 	 */
-	public static boolean saveBitmap2RomCache(Context context,Bitmap bmp,String filePath){
-		return saveBitmap(bmp, getRomCachePath(context)+filePath);
+	public static boolean saveBitmap2Rom(Context context, Bitmap bmp, String filePath){
+		return saveBitmap(bmp, getRomPath(context) + filePath);
 	}
 	
 	/**
 	 * 保存图片到指定路径
 	 * <p>要检查路径存在与否
 	 * @param bmp
-	 * @param fullFilePath
+	 * @param fullFilePath 全路径
 	 * @return
 	 */
-	public static boolean saveBitmap(Bitmap bmp,String fullFilePath) {
+	public static boolean saveBitmap(Bitmap bmp, String fullFilePath) {
 		if(fullFilePath==null || fullFilePath.length()<1){
 			Log.e(TAG, "save bitmap fail as file path invalid");
 			return false;
@@ -223,11 +229,11 @@ public class ResourceUtil {
 	 * @param fileName
 	 * @return
 	 */
-	public static Bitmap getBitmapData(Context context,String fileName){
-		if(isSdcardFileExist(SD_IMG_PATH+fileName)){
-			return getBitmapFromSdcard(SD_IMG_PATH+fileName);
-		}else if(isRomCacheFileExist(context, ROM_IMG_PATH+fileName)){
-			return getBitmapFromRomCache(context,ROM_IMG_PATH+fileName);
+	public static Bitmap getBitmapData(Context context, String fileName){
+		if(isSdcardFileExist(SD_IMG_PATH + fileName)){
+			return getBitmapFromSdcard(SD_IMG_PATH + fileName);
+		}else if(isRomFileExist(context, ROM_IMG_PATH + fileName)){
+			return getBitmapFromRom(context,ROM_IMG_PATH + fileName);
 		}
 		return null;
 	}
@@ -242,7 +248,7 @@ public class ResourceUtil {
 			Log.e(TAG, "get bitmap from sdCard fail as sdCard not exist");
 			return null;
 		}
-		return getBitmap(getSdcardPath()+filePath);
+		return getBitmap(getSdcardPath() + filePath);
 	}
 	
 	/**
@@ -250,8 +256,8 @@ public class ResourceUtil {
 	 * @param fullFilePath
 	 * @return
 	 */
-	public static Bitmap getBitmapFromRomCache(Context context,String filePath){
-		return getBitmap(getRomCachePath(context)+filePath);
+	public static Bitmap getBitmapFromRom(Context context,String filePath){
+		return getBitmap(getRomPath(context) + filePath);
 	}
 	
 	/**
@@ -261,7 +267,7 @@ public class ResourceUtil {
 	 */
 	public static Bitmap getBitmap(String fullFilePath){
 		try {
-			File file=new File(fullFilePath);
+			File file = new File(fullFilePath);
 			if(file.exists()){
 				return BitmapFactory.decodeFile(fullFilePath);
 			}
@@ -318,8 +324,8 @@ public class ResourceUtil {
 		} else {
 			String filePath = ROM_DATA_PATH + fileName;
 			String folder = getFolder(filePath);
-			mkRomCacheDirs(context, folder);
-			writeString2RomCache(context, filePath, content);
+			mkRomDirs(context, folder);
+			writeString2Rom(context, filePath, content);
 		}
 	}
 	
@@ -331,10 +337,10 @@ public class ResourceUtil {
 	 * @return
 	 */
 	public static String readStringData(Context context,String fileName){
-		if(isSdcardFileExist(SD_DATA_PATH+fileName)){
-			return readStringFromSdcard(SD_DATA_PATH+fileName);
-		}else if(isRomCacheFileExist(context, ROM_DATA_PATH+fileName)){
-			return readStringFromRomCache(context,ROM_DATA_PATH+fileName);
+		if(isSdcardFileExist(SD_DATA_PATH + fileName)){
+			return readStringFromSdcard(SD_DATA_PATH + fileName);
+		}else if(isRomFileExist(context, ROM_DATA_PATH + fileName)){
+			return readStringFromRom(context,ROM_DATA_PATH + fileName);
 		}
 		return null;
 	}
@@ -346,7 +352,7 @@ public class ResourceUtil {
 	 */
 	public static String readStringFromPackage(Class<?> clazz,String pkgPath,String fileName){
 		try {
-			InputStream is=clazz.getResourceAsStream(pkgPath+fileName);
+			InputStream is = clazz.getResourceAsStream(pkgPath+fileName);
 			return readString(is);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -415,8 +421,8 @@ public class ResourceUtil {
 	 * @param filePath
 	 * @return
 	 */
-	public static String readStringFromRomCache(Context context,String filePath) {
-		File file=new File(getRomCachePath(context)+filePath);
+	public static String readStringFromRom(Context context,String filePath) {
+		File file=new File(getRomPath(context)+filePath);
 		return readString(file);
 	}
 	
@@ -451,9 +457,9 @@ public class ResourceUtil {
 	 * @param content
 	 * @return
 	 */
-	public static boolean writeString2RomCache(Context context,String filePath,String content){
-		String cachePath = getRomCachePath(context);
-		return writeString(cachePath+filePath, content);
+	public static boolean writeString2Rom(Context context,String filePath,String content){
+		String cachePath = getRomPath(context);
+		return writeString(cachePath + filePath, content);
 	}
 	
 	/**
@@ -478,7 +484,7 @@ public class ResourceUtil {
 	 * @return
 	 */
 	public static boolean retrieveFileFromAssets(
-			Context context,String fromPath,String toPath){
+			Context context, String fromPath, String toPath){
 		InputStream is = null;
 		FileOutputStream fos = null;
 		try {
@@ -517,7 +523,7 @@ public class ResourceUtil {
 	@SuppressWarnings("deprecation")
 	public static boolean isSdcardAvailable(long limit){
 		if(!isSdcardReady())
-			return true;
+			return false;
 		File sdcardDir = Environment.getExternalStorageDirectory(); 
 		StatFs sf = new StatFs(sdcardDir.getPath()); 
 		long blockSize = sf.getBlockSize();
@@ -606,4 +612,46 @@ public class ResourceUtil {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * 返回已构建的插件目录
+	 * @param context
+	 * @param pluginName
+	 * @return
+	 */
+	public static String getPluginsFolder(Context context, String pluginName) {
+		String end = "";
+		if(pluginName.contains("_")){
+			String[] exps = pluginName.split("_");
+			end = exps[0] + File.separator + exps[1] + File.separator;
+		}
+		else end = pluginName + File.separator;
+		
+		if (isSdcardAvailable(OPTIMIZATION_SIZE)) {
+			mkSdcardFileDirs(SD_PLG_PATH + end);
+			return getSdcardPath() + SD_PLG_PATH + end;
+		}
+		
+		if (!isRomCacheAvailable(OPTIMIZATION_SIZE)) {
+			mkRomDirs(context, ROM_PLG_PATH + end);
+			return getRomPath(context) + ROM_PLG_PATH + end;
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * 新建已构建目录的插件文件
+	 * @param context
+	 * @param pluginName
+	 * @param fileName
+	 * @return
+	 */
+	public static File newPluginFile(Context context, String pluginName, String fileName) {
+		String folder = getPluginsFolder(context, pluginName);
+		if(folder != null)
+			return new File(folder + fileName);
+		return null;
+	}
+
 }
