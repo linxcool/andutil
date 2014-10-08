@@ -29,12 +29,10 @@ public class ResourceUtil {
 
 	private static final String TAG = "ResourceUtil";
 	
-	public static final String SD_IMG_PATH   = "linxcool/sdk/imgs/";
+	public static final String SD_IMG_PATH   = "linxcool/util/imgs/";
 	public static final String ROM_IMG_PATH  = "sdk/imgs/";
-	public static final String SD_DATA_PATH  = "linxcool/sdk/data/";
+	public static final String SD_DATA_PATH  = "linxcool/util/data/";
 	public static final String ROM_DATA_PATH = "sdk/data/";
-	public static final String SD_PLG_PATH   = "linxcool/sdk/plgs/";
-	public static final String ROM_PLG_PATH  = "sdk/plgs/";
 	
 	private static final int OPTIMIZATION_SIZE = 4096;
 	
@@ -611,47 +609,6 @@ public class ResourceUtil {
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-	
-	/**
-	 * 返回已构建的插件目录
-	 * @param context
-	 * @param pluginName
-	 * @return
-	 */
-	public static String getPluginsFolder(Context context, String pluginName) {
-		String end = "";
-		if(pluginName.contains("_")){
-			String[] exps = pluginName.split("_");
-			end = exps[0] + File.separator + exps[1] + File.separator;
-		}
-		else end = pluginName + File.separator;
-		
-		if (isSdcardAvailable(OPTIMIZATION_SIZE)) {
-			mkSdcardFileDirs(SD_PLG_PATH + end);
-			return getSdcardPath() + SD_PLG_PATH + end;
-		}
-		
-		if (!isRomCacheAvailable(OPTIMIZATION_SIZE)) {
-			mkRomDirs(context, ROM_PLG_PATH + end);
-			return getRomPath(context) + ROM_PLG_PATH + end;
-		}
-		
-		return null;
-	}
-	
-	/**
-	 * 新建已构建目录的插件文件
-	 * @param context
-	 * @param pluginName
-	 * @param fileName
-	 * @return
-	 */
-	public static File newPluginFile(Context context, String pluginName, String fileName) {
-		String folder = getPluginsFolder(context, pluginName);
-		if(folder != null)
-			return new File(folder + fileName);
-		return null;
 	}
 
 }
